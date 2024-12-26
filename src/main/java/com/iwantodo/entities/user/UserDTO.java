@@ -7,9 +7,11 @@ public class UserDTO {
     private String password;
 
 
-    public UserDTO(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public UserDTO(User user) {
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
     }
 
     public Long getUserId() {
