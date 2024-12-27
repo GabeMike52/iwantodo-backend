@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
+//The class should have a no-arg constructor, will look into that later!
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
