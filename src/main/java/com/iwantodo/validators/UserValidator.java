@@ -1,6 +1,8 @@
 package com.iwantodo.validators;
 
 import com.iwantodo.entities.user.User;
+import com.iwantodo.infra.exception.ErrorMessages;
+import com.iwantodo.infra.exception.UserNotValidException;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -21,13 +23,19 @@ public class UserValidator {
     public static void execute(User user) {
         if (StringUtils.isEmpty(user.getUsername())) {
             //TODO: Customize with custom exceptions and error messages
-            throw new RuntimeException();
+            throw new UserNotValidException(ErrorMessages.NAME_REQUIRED.getMessage());
         }
         if (!isEmailValid(user.getEmail())) {
-            throw new RuntimeException();
+            throw new UserNotValidException(ErrorMessages.EMAIL_NOT_VALID.getMessage());
         }
-        if(user.getPassword() == null || user.getPassword().length() < 8) {
-            throw new RuntimeException();
+        if(StringUtils.isEmpty(user.getEmail())) {
+            throw new UserNotValidException(ErrorMessages.EMAIL_REQUIRED.getMessage());
+        }
+        if(StringUtils.isEmpty(user.getPassword())) {
+            throw new UserNotValidException(ErrorMessages.PASSWORD_REQUIRED.getMessage());
+        }
+        if(user.getPassword().length() < 8) {
+            throw new UserNotValidException(ErrorMessages.PASSWORD_LENGTH.getMessage());
         }
     }
 }
