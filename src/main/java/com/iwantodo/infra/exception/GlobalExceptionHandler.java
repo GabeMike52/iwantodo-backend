@@ -14,4 +14,11 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleUserNotValidException(UserNotValidException exception) {
         return new ErrorResponse(exception.getMessage());
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorResponse handleUserNotFoundException(UserNotFoundException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
 }
