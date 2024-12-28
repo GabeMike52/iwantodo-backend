@@ -28,9 +28,6 @@ public class UserValidator {
         if (!isEmailValid(user.getEmail())) {
             throw new UserNotValidException(ErrorMessages.EMAIL_NOT_VALID.getMessage());
         }
-        if(StringUtils.isEmpty(user.getEmail())) {
-            throw new UserNotValidException(ErrorMessages.EMAIL_REQUIRED.getMessage());
-        }
         if(StringUtils.isEmpty(user.getPassword())) {
             throw new UserNotValidException(ErrorMessages.PASSWORD_REQUIRED.getMessage());
         }

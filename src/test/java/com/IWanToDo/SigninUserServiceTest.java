@@ -1,6 +1,7 @@
 package com.IWanToDo;
 
 import com.iwantodo.entities.user.User;
+import com.iwantodo.infra.exception.ErrorMessages;
 import com.iwantodo.infra.exception.UserNotFoundException;
 import com.iwantodo.repositories.UserRepository;
 import com.iwantodo.services.user.SigninUserService;
@@ -60,15 +61,17 @@ public class SigninUserServiceTest {
         when(userRepository.findUserByUsername(nonExistentUsername)).thenReturn(null);
 
         //When
-        Exception exception = Assertions.assertThrows(UserNotFoundException.class, () -> {
-            User user = new User();
-            user.setUsername(nonExistentUsername);
-            user.setPassword("password");
-            signinUserService.execute(user);
+        UserNotFoundException exception = Assertions.assertThrows(
+                UserNotFoundException.class,
+                () -> {
+                    User user = new User();
+                    user.setUsername(nonExistentUsername);
+                    user.setPassword("password");
+                    signinUserService.execute(user);
         });
 
         //Then
-        Assertions.assertEquals("No users found", exception.getMessage());
+        Assertions.assertEquals(ErrorMessages.USER_NOT_FOUND.getMessage(), exception.getMessage());
         verify(userRepository, times(1)).findUserByUsername(nonExistentUsername);
         verifyNoInteractions(passwordEncoder);
     }
@@ -87,12 +90,15 @@ public class SigninUserServiceTest {
         when(passwordEncoder.matches(wrongPassword, user.getPassword())).thenReturn(false);
 
         //When
-        Exception exception = Assertions.assertThrows(BadCredentialsException.class, () -> {
-            User wrongUser = new User();
-            wrongUser.setUsername("John Doe");
-            wrongUser.setPassword(wrongPassword);
-            signinUserService.execute(wrongUser);
-        });
+        BadCredentialsException exception = Assertions.assertThrows(
+                BadCredentialsException.class,
+                () -> {
+                    User wrongUser = new User();
+                    wrongUser.setUsername("John Doe");
+                    wrongUser.setPassword(wrongPassword);
+                    signinUserService.execute(wrongUser);
+                }
+        );
 
         //Then
         Assertions.assertEquals("Username or password invalid", exception.getMessage());
