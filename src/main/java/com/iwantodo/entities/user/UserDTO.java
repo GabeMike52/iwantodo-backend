@@ -1,5 +1,7 @@
 package com.iwantodo.entities.user;
 
+import java.util.Objects;
+
 public class UserDTO {
     private Long userId;
     private String username;
@@ -37,5 +39,21 @@ public class UserDTO {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        UserDTO that = (UserDTO) o;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(username, that.username) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, email, password);
     }
 }

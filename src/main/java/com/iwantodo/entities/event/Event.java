@@ -11,6 +11,7 @@ public class Event {
     @Column(name = "event_id")
     private Long eventId;
     private String title;
+    private Boolean done;
 
     @ManyToOne
     private User owner;
@@ -35,5 +36,11 @@ public class Event {
     }
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+    public Boolean getDone() {
+        return done;
+    }
+    public void setDone(Boolean done) {
+        this.done = done;
     }
 }
