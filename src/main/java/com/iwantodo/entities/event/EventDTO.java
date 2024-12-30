@@ -10,10 +10,10 @@ public class EventDTO {
     private Boolean done;
     private User owner;
 
-    public EventDTO(String title, Boolean done, User owner) {
-        this.title = title;
-        this.done = done;
-        this.owner = owner;
+    public EventDTO(Event event) {
+        this.title = event.getTitle();
+        this.done = event.getDone();
+        this.owner = event.getOwner();
     }
 
     public Long getEventId() {

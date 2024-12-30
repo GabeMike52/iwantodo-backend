@@ -14,10 +14,18 @@ public class Event {
     private Boolean done;
 
     @ManyToOne
+    @JoinColumn(name = "username", nullable = false)
     private User owner;
 
+    public Event() {
 
+    }
 
+    public Event(String title, Boolean done, User owner) {
+        this.title = title;
+        this.done = done;
+        this.owner = owner;
+    }
 
     public Long getEventId() {
         return eventId;

@@ -8,7 +8,8 @@ public enum ErrorMessages {
     PASSWORD_REQUIRED("Password is required"),
     PASSWORD_LENGTH("Password must be at least 8 chars"),
     USER_ALREADY_EXISTS("A user with this username already exists"),
-    USER_NOT_FOUND("No users found");
+    USER_NOT_FOUND("No users found"),
+    NOT_AUTHENTICATED("User not authenticated");
 
     private final String message;
     ErrorMessages(String message) {
