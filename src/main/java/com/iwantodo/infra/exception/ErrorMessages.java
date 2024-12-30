@@ -2,6 +2,7 @@ package com.iwantodo.infra.exception;
 
 public enum ErrorMessages {
     NAME_REQUIRED("Username is required"),
+    NAME_INVALID("Username using invalid format"),
     EMAIL_NOT_VALID("Email using invalid format"),
     EMAIL_REQUIRED("Email is required"),
     PASSWORD_REQUIRED("Password is required"),

@@ -20,10 +20,19 @@ public class UserValidator {
         return matcher.matches();
     }
 
+    public static boolean isUsernameValid(String username) {
+        String usernameRegex = "^[a-z._]+$";
+        Pattern pattern = Pattern.compile(usernameRegex);
+        Matcher matcher = pattern.matcher(username);
+        return matcher.matches();
+    }
+
     public static void execute(User user) {
         if (StringUtils.isEmpty(user.getUsername())) {
-            //TODO: Customize with custom exceptions and error messages
             throw new UserNotValidException(ErrorMessages.NAME_REQUIRED.getMessage());
+        }
+        if(!isUsernameValid(user.getUsername())) {
+            throw new UserNotValidException(ErrorMessages.NAME_INVALID.getMessage());
         }
         if (!isEmailValid(user.getEmail())) {
             throw new UserNotValidException(ErrorMessages.EMAIL_NOT_VALID.getMessage());
