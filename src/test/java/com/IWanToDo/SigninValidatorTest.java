@@ -12,7 +12,7 @@ public class SigninValidatorTest {
     public void given_valid_information_when_execute_then_no_exception() {
         //Given
         User validInfo = new User();
-        validInfo.setUsername("John Doe");
+        validInfo.setUsername("john.doe");
         validInfo.setPassword("this-user-password");
 
         //When & Then
@@ -38,7 +38,7 @@ public class SigninValidatorTest {
     public void given_password_empty_when_execute_throw_user_not_valid_exception() {
         //Given
         User userWithEmptyPassword = new User();
-        userWithEmptyPassword.setUsername("John Doe");
+        userWithEmptyPassword.setUsername("john.doe");
         userWithEmptyPassword.setPassword("");
 
         //When & Then

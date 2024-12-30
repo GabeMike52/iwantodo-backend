@@ -36,12 +36,11 @@ public class SigninUserServiceTest {
     public void given_user_exists_when_signin_user_service_then_return_login_message() {
         //Given
         User user = new User();
-        user.setId(1L);
-        user.setUsername("John Doe");
+        user.setUsername("john.doe");
         user.setEmail("john@doe.com");
         user.setPassword("raw-password");
 
-        when(userRepository.findUserByUsername("John Doe")).thenReturn(user);
+        when(userRepository.findUserByUsername("john.doe")).thenReturn(user);
         when(passwordEncoder.matches("raw-password", user.getPassword())).thenReturn(true);
 
         //When
@@ -57,7 +56,7 @@ public class SigninUserServiceTest {
     @Test
     public void given_user_does_not_exists_when_signin_user_service_throw_user_not_found_exception() {
         //Given
-        String nonExistentUsername = "Louis";
+        String nonExistentUsername = "louis.mark";
         when(userRepository.findUserByUsername(nonExistentUsername)).thenReturn(null);
 
         //When
@@ -80,13 +79,12 @@ public class SigninUserServiceTest {
     public void given_user_password_does_not_match_when_user_signin_service_throw_bad_credentials_exception() {
         //Given
         User user = new User();
-        user.setId(1L);
-        user.setUsername("John Doe");
+        user.setUsername("john.doe");
         user.setPassword("im-right");
 
         String wrongPassword = "im-wrong";
 
-        when(userRepository.findUserByUsername("John Doe")).thenReturn(user);
+        when(userRepository.findUserByUsername("john.doe")).thenReturn(user);
         when(passwordEncoder.matches(wrongPassword, user.getPassword())).thenReturn(false);
 
         //When
@@ -94,7 +92,7 @@ public class SigninUserServiceTest {
                 BadCredentialsException.class,
                 () -> {
                     User wrongUser = new User();
-                    wrongUser.setUsername("John Doe");
+                    wrongUser.setUsername("john.doe");
                     wrongUser.setPassword(wrongPassword);
                     signinUserService.execute(wrongUser);
                 }
@@ -102,7 +100,7 @@ public class SigninUserServiceTest {
 
         //Then
         Assertions.assertEquals("Username or password invalid", exception.getMessage());
-        verify(userRepository, times(1)).findUserByUsername("John Doe");
+        verify(userRepository, times(1)).findUserByUsername("john.doe");
         verify(passwordEncoder, times(1)).matches(wrongPassword, user.getPassword());
     }
 }

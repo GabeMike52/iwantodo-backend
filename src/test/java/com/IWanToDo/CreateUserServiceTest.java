@@ -34,14 +34,12 @@ public class CreateUserServiceTest {
     public void given_user_information_when_create_user_service_then_return_user_dto() {
         //Given
         User user = new User();
-        user.setId(1L);
-        user.setUsername("John Doe");
+        user.setUsername("john.doe");
         user.setEmail("john@doe.com");
         user.setPassword("TestingTestTestable");
 
         User userEncoded = new User();
-        userEncoded.setId(1L);
-        userEncoded.setUsername("John Doe");
+        userEncoded.setUsername("john.doe");
         userEncoded.setEmail("john@doe.com");
         userEncoded.setPassword("encoded-password");
 
