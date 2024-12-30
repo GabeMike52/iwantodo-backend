@@ -11,7 +11,8 @@ public class Event {
     @Column(name = "event_id")
     private Long eventId;
     private String title;
-    private Boolean done;
+    @Column(name = "done")
+    private Boolean done = false;
 
     @ManyToOne
     @JoinColumn(name = "username", nullable = false)

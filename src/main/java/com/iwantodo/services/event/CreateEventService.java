@@ -9,6 +9,7 @@ import com.iwantodo.infra.exception.UserNotValidException;
 import com.iwantodo.repositories.EventRepository;
 import com.iwantodo.repositories.UserRepository;
 import com.iwantodo.services.Command;
+import com.iwantodo.validators.EventValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class CreateEventService implements Command<Event, EventDTO> {
     @Override
     public ResponseEntity<EventDTO> execute(Event event) {
         logger.info("Executing " + getClass() + " event: ");
+        EventValidator.execute(event);
         String username = getAuthenticatedUsername();
         if(username == null || username.isEmpty()) {
             throw new UserNotValidException(ErrorMessages.NOT_AUTHENTICATED.getMessage());
