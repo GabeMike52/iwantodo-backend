@@ -29,7 +29,7 @@ public class CreateEventService implements Command<Event, EventDTO> {
         this.userRepository = userRepository;
     }
 
-    private String getAuthenticatedUsername() {
+    public String getAuthenticatedUsername() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof UserDetails) {
             return ((UserDetails) principal).getUsername();
@@ -46,9 +46,6 @@ public class CreateEventService implements Command<Event, EventDTO> {
             throw new UserNotValidException(ErrorMessages.NOT_AUTHENTICATED.getMessage());
         }
         User user = userRepository.findUserByUsername(username);
-        if(user == null) {
-            throw new UserNotFoundException(ErrorMessages.USER_NOT_FOUND.getMessage());
-        }
         event.setOwner(user);
         Event savedEvent = eventRepository.save(new Event(event.getTitle(), event.getDone(), event.getOwner()));
         return ResponseEntity.ok(new EventDTO(savedEvent));
