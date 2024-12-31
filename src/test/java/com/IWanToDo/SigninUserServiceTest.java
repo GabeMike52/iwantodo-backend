@@ -3,6 +3,7 @@ package com.IWanToDo;
 import com.iwantodo.entities.user.User;
 import com.iwantodo.infra.exception.ErrorMessages;
 import com.iwantodo.infra.exception.UserNotFoundException;
+import com.iwantodo.infra.security.jwt.JwtUtil;
 import com.iwantodo.repositories.UserRepository;
 import com.iwantodo.services.user.SigninUserService;
 import org.junit.jupiter.api.Assertions;
@@ -12,8 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -24,6 +30,9 @@ public class SigninUserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
     @InjectMocks
     private SigninUserService signinUserService;
 
@@ -33,24 +42,31 @@ public class SigninUserServiceTest {
     }
 
     @Test
-    public void given_user_exists_when_signin_user_service_then_return_login_message() {
+    public void given_user_exists_when_signin_user_service_then_return_token() {
         //Given
         User user = new User();
         user.setUsername("john.doe");
         user.setEmail("john@doe.com");
         user.setPassword("raw-password");
 
+        String jwtToken = "jwtTokenExample";
+
         when(userRepository.findUserByUsername("john.doe")).thenReturn(user);
         when(passwordEncoder.matches("raw-password", user.getPassword())).thenReturn(true);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        Authentication authentication = mock(Authentication.class);
+        when(authenticationManager.authenticate(authToken)).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), List.of()));
+        mockStatic(JwtUtil.class).when(() -> JwtUtil.generateToken(any())).thenReturn(jwtToken);
 
         //When
         ResponseEntity<String> response = signinUserService.execute(user);
 
         //Then
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals("User successfully signed-in", response.getBody());
+        Assertions.assertEquals(jwtToken, response.getBody());
         verify(userRepository, times(1)).findUserByUsername(user.getUsername());
         verify(passwordEncoder, times(1)).matches("raw-password", user.getPassword());
+        verify(authenticationManager).authenticate(authToken);
     }
 
     @Test
