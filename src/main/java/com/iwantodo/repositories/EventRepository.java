@@ -1,7 +1,6 @@
 package com.iwantodo.repositories;
 
 import com.iwantodo.entities.event.Event;
-import com.iwantodo.entities.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
