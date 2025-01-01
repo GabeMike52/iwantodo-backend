@@ -73,7 +73,7 @@ public class CreateEventServiceTest {
             //When
             ResponseEntity<EventDTO> response = createEventService.execute(command);
 
-            //Assert
+            //Then
             Assertions.assertNotNull(response);
             Assertions.assertEquals(new EventDTO(validEvent), response.getBody());
             verify(userRepository, times(1)).findUserByUsername(username);

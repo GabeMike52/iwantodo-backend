@@ -49,7 +49,6 @@ public class JwtUtil {
     }
 
     public static String extractToken(String header) {
-        System.out.println("Auth Header: " + header);
         if(header != null && header.startsWith("Bearer ")) {
             return header.substring(7).trim();
         }
