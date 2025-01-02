@@ -17,12 +17,9 @@ import java.util.Optional;
 @Service
 public class UpdateEventService implements Command<UpdateEventCommand, EventDTO> {
     private final EventRepository eventRepository;
-    private final JwtUtil jwtUtil;
     private static final Logger logger = LoggerFactory.getLogger(UpdateEventService.class);
-    public UpdateEventService(EventRepository eventRepository,
-                              JwtUtil jwtUtil) {
+    public UpdateEventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
-        this.jwtUtil = jwtUtil;
     }
 
     @Override
