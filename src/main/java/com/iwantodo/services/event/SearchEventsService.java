@@ -26,7 +26,7 @@ public class SearchEventsService implements Query<SearchEventsCommand, List<Even
     @Override
     public ResponseEntity<List<EventDTO>> execute(SearchEventsCommand command) {
         logger.info("Executing " + getClass() + " title: " + command.getTitle());
-        String token = jwtUtil.extractToken(command.getToken());
+        String token = jwtUtil.extractToken(command.getHeader());
         String username = jwtUtil.extractUsername(token);
         List<Event> events = eventRepository.findEventByTitle(username, command.getTitle());
         List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();

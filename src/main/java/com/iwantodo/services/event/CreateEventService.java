@@ -35,7 +35,7 @@ public class CreateEventService implements Command<CreateEventCommand, EventDTO>
     public ResponseEntity<EventDTO> execute(CreateEventCommand command) {
         logger.info("Executing " + getClass() + " event: " + command.getEvent());
         EventValidator.execute(command.getEvent());
-        String token = jwtUtil.extractToken(command.getToken());
+        String token = jwtUtil.extractToken(command.getHeader());
         String username = jwtUtil.extractUsername(token);
         if(username == null || username.isEmpty()) {
             throw new UserNotValidException(ErrorMessages.NOT_AUTHENTICATED.getMessage());

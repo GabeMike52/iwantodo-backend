@@ -53,14 +53,14 @@ public class CreateEventServiceTest {
         validEvent.setTitle("Testing");
         validEvent.setDone(false);
 
-        String jwtToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9.dummy-signature";
-        String token = jwtToken.substring(7).trim();
+        String header = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9.dummy-signature";
+        String token = header.substring(7).trim();
 
-        CreateEventCommand command = new CreateEventCommand(jwtToken, validEvent);
+        CreateEventCommand command = new CreateEventCommand(header, validEvent);
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(username);
-        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractToken(header)).thenReturn(token);
         when(jwtUtil.extractUsername(token)).thenReturn(username);
         when(jwtUtil.getClaims(token)).thenReturn(claims);
         when(userRepository.findUserByUsername(username)).thenReturn(user);
@@ -88,14 +88,14 @@ public class CreateEventServiceTest {
         event.setTitle("Testing");
         event.setDone(false);
 
-        String jwtToken = "Bearer jwt-token-john.doe";
-        String token = jwtToken.substring(7).trim();
+        String header = "Bearer jwt-token-john.doe";
+        String token = header.substring(7).trim();
 
-        CreateEventCommand command = new CreateEventCommand(jwtToken, event);
+        CreateEventCommand command = new CreateEventCommand(header, event);
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(emptyUsername);
-        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractToken(header)).thenReturn(token);
         when(jwtUtil.extractUsername(token)).thenReturn(emptyUsername);
         when(jwtUtil.getClaims(token)).thenReturn(claims);
         when(userRepository.findUserByUsername(emptyUsername)).thenReturn(null);

@@ -41,12 +41,12 @@ public class GetEventsServiceTest {
         Event eventTwo = new Event("Testing 2", true, user);
         List<Event> events = List.of(eventOne, eventTwo);
 
-        String jwtToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9.dummy-signature";
-        String token = jwtToken.substring(7).trim();
+        String header = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9.dummy-signature";
+        String token = header.substring(7).trim();
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(user.getUsername());
-        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractToken(header)).thenReturn(token);
         when(jwtUtil.extractUsername(token)).thenReturn(user.getUsername());
         when(jwtUtil.getClaims(token)).thenReturn(claims);
         when(eventRepository.findByOwner(user.getUsername())).thenReturn(events);
@@ -54,7 +54,7 @@ public class GetEventsServiceTest {
         List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();
 
         //When
-        ResponseEntity<List<EventDTO>> response = getEventsService.execute(jwtToken);
+        ResponseEntity<List<EventDTO>> response = getEventsService.execute(header);
 
         //Then
         Assertions.assertNotNull(response);

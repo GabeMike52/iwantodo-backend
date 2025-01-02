@@ -3,18 +3,18 @@ package com.iwantodo.services.event;
 import com.iwantodo.entities.event.Event;
 
 public class CreateEventCommand {
-    private String token;
+    private String header;
     private Event event;
 
-    public String getToken() {
-        return token;
+    public String getHeader() {
+        return header;
     }
     public Event getEvent() {
         return event;
     }
 
-    public CreateEventCommand(String token, Event event) {
-        this.token = token;
+    public CreateEventCommand(String header, Event event) {
+        this.header = header;
         this.event = event;
     }
 }
