@@ -8,8 +8,6 @@ import com.iwantodo.validators.EventValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.when;
-
 public class EventValidatorTest {
     @Test
     public void given_valid_event_when_execute_then_no_exception() {
