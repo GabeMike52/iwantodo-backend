@@ -8,9 +8,11 @@ import com.iwantodo.services.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SearchEventsService implements Query<SearchEventsCommand, List<EventDTO>> {
     private final EventRepository eventRepository;
     private final JwtUtil jwtUtil;
