@@ -11,13 +11,11 @@ import com.iwantodo.repositories.UserRepository;
 import com.iwantodo.services.event.CreateEventCommand;
 import com.iwantodo.services.event.CreateEventService;
 import io.jsonwebtoken.Claims;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
