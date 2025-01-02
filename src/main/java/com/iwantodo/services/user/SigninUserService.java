@@ -43,7 +43,7 @@ public class SigninUserService implements Command<User, String> {
         SigninValidator.execute(user);
         Optional<User> userOptional = Optional.ofNullable(userRepository.findUserByUsername(user.getUsername()));
         if(userOptional.isEmpty()) {
-            throw new UserNotFoundException(ErrorMessages.USER_NOT_FOUND.getMessage());
+            throw new UserNotFoundException();
         }
         if(!encoder.matches(user.getPassword(), userOptional.get().getPassword())) {
             throw new BadCredentialsException("Username or password invalid");

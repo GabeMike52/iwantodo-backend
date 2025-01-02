@@ -12,6 +12,7 @@ import com.iwantodo.services.Command;
 import com.iwantodo.validators.EventValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,6 @@ public class CreateEventService implements Command<CreateEventCommand, EventDTO>
         Event event = command.getEvent();
         event.setOwner(user);
         Event savedEvent = eventRepository.save(new Event(event.getTitle(), event.getDone(), event.getOwner()));
-        return ResponseEntity.ok(new EventDTO(savedEvent));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new EventDTO(savedEvent));
     }
 }

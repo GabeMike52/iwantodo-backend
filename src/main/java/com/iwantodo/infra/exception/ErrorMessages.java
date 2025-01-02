@@ -11,7 +11,8 @@ public enum ErrorMessages {
     USER_NOT_FOUND("No users found"),
     NOT_AUTHENTICATED("User not authenticated"),
     TITLE_REQUIRED("Title is required"),
-    STATUS_REQUIRED("A status for the event is required");
+    STATUS_REQUIRED("A status for the event is required"),
+    EVENT_NOT_FOUND("No event found");
 
     private final String message;
     ErrorMessages(String message) {
