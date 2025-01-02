@@ -5,12 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
-    public static String generateToken(User user) {
+    public String generateToken(User user) {
         long expirationTime = 1000 * 60 * 60;
         return Jwts
                 .builder()
@@ -20,7 +22,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static Claims getClaims(String token) {
+    public Claims getClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(getSigninKey())
@@ -29,26 +31,26 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    public static boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token) {
         return !isExpired(token);
     }
 
-    public static boolean isExpired(String token) {
+    public boolean isExpired(String token) {
         return getClaims(token)
                 .getExpiration()
                 .before(new Date());
     }
 
-    public static SecretKey getSigninKey() {
+    public SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode("QPhLG9Kcjhl8ZobgvvBmTsrCyW0qjT2QOm73LogLfA8jsd6n3z");
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    public static String extractToken(String header) {
+    public String extractToken(String header) {
         if(header != null && header.startsWith("Bearer ")) {
             return header.substring(7).trim();
         }

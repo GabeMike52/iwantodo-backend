@@ -15,16 +15,19 @@ import java.util.List;
 @Service
 public class GetEventsService implements Query<String, List<EventDTO>> {
     private final EventRepository eventRepository;
+    private final JwtUtil jwtUtil;
     private static final Logger logger = LoggerFactory.getLogger(GetEventsService.class);
-    public GetEventsService(EventRepository eventRepository) {
+    public GetEventsService(EventRepository eventRepository,
+                            JwtUtil jwtUtil) {
         this.eventRepository = eventRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
     public ResponseEntity<List<EventDTO>> execute(String header) {
         logger.info("Executing " + getClass());
-        String token = JwtUtil.extractToken(header);
-        String username = JwtUtil.extractUsername(token);
+        String token = jwtUtil.extractToken(header);
+        String username = jwtUtil.extractUsername(token);
         List<Event> events = eventRepository.findByOwner(username);
         List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();
         return ResponseEntity.ok(eventDTOs);

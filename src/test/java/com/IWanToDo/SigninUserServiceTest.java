@@ -33,6 +33,9 @@ public class SigninUserServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
+    @Mock
+    private JwtUtil jwtUtil;
+
     @InjectMocks
     private SigninUserService signinUserService;
 
@@ -57,7 +60,7 @@ public class SigninUserServiceTest {
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(authToken)).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), List.of()));
-        mockStatic(JwtUtil.class).when(() -> JwtUtil.generateToken(any())).thenReturn(jwtToken);
+        mockStatic(JwtUtil.class).when(() -> jwtUtil.generateToken(any())).thenReturn(jwtToken);
 
         //When
         ResponseEntity<String> response = signinUserService.execute(user);

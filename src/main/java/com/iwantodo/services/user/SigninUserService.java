@@ -24,13 +24,17 @@ import java.util.Optional;
 public class SigninUserService implements Command<User, String> {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final JwtUtil jwtUtil;
     private static final Logger logger = LoggerFactory.getLogger(SigninUserService.class);
     private final AuthenticationManager authenticationManager;
     public SigninUserService(UserRepository userRepository,
-                             PasswordEncoder encoder, AuthenticationManager authenticationManager) {
+                             PasswordEncoder encoder,
+                             AuthenticationManager authenticationManager,
+                             JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class SigninUserService implements Command<User, String> {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToken = JwtUtil.generateToken((org.springframework.security.core.userdetails.User) authentication.getPrincipal());
+        String jwtToken = jwtUtil.generateToken((org.springframework.security.core.userdetails.User) authentication.getPrincipal());
         return ResponseEntity.ok(jwtToken);
     }
 }

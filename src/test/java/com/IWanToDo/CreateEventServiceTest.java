@@ -11,6 +11,7 @@ import com.iwantodo.repositories.UserRepository;
 import com.iwantodo.services.event.CreateEventCommand;
 import com.iwantodo.services.event.CreateEventService;
 import io.jsonwebtoken.Claims;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,7 +40,7 @@ public class CreateEventServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        createEventService = spy(new CreateEventService(eventRepository, userRepository));
+        createEventService = spy(new CreateEventService(eventRepository, jwtUtil, userRepository));
     }
 
     @Test
@@ -63,23 +62,20 @@ public class CreateEventServiceTest {
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(username);
-        try (MockedStatic<JwtUtil> mockedJwtUtil = mockStatic(JwtUtil.class)) {
-            mockedJwtUtil.when(() -> JwtUtil.extractToken(jwtToken)).thenReturn(token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenReturn(username);
-            mockedJwtUtil.when(() -> JwtUtil.getClaims(token)).thenReturn(claims);
-            when(userRepository.findUserByUsername(username)).thenReturn(user);
-            when(eventRepository.save(any(Event.class))).thenReturn(validEvent);
+        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractUsername(token)).thenReturn(username);
+        when(jwtUtil.getClaims(token)).thenReturn(claims);
+        when(userRepository.findUserByUsername(username)).thenReturn(user);
+        when(eventRepository.save(any(Event.class))).thenReturn(validEvent);
 
-            //When
-            ResponseEntity<EventDTO> response = createEventService.execute(command);
+        //When
+        ResponseEntity<EventDTO> response = createEventService.execute(command);
 
-            //Then
-            Assertions.assertNotNull(response);
-            Assertions.assertEquals(new EventDTO(validEvent), response.getBody());
-            verify(userRepository, times(1)).findUserByUsername(username);
-            verify(eventRepository, times(1)).save(any(Event.class));
-
-        }
+        //Then
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(new EventDTO(validEvent), response.getBody());
+        verify(userRepository, times(1)).findUserByUsername(username);
+        verify(eventRepository, times(1)).save(any(Event.class));
     }
 
     @Test
@@ -101,18 +97,16 @@ public class CreateEventServiceTest {
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(emptyUsername);
-        try (MockedStatic<JwtUtil> mockedJwtUtil = mockStatic(JwtUtil.class)) {
-            mockedJwtUtil.when(() -> JwtUtil.extractToken(jwtToken)).thenReturn(token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenReturn(emptyUsername);
-            mockedJwtUtil.when(() -> JwtUtil.getClaims(token)).thenReturn(claims);
-            when(userRepository.findUserByUsername(emptyUsername)).thenReturn(null);
+        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractUsername(token)).thenReturn(emptyUsername);
+        when(jwtUtil.getClaims(token)).thenReturn(claims);
+        when(userRepository.findUserByUsername(emptyUsername)).thenReturn(null);
 
-            //When & Then
-            UserNotValidException exception = Assertions.assertThrows(
-                    UserNotValidException.class,
-                    () -> createEventService.execute(command)
-            );
-            Assertions.assertEquals(ErrorMessages.NOT_AUTHENTICATED.getMessage(), exception.getMessage());
-        }
+        //When & Then
+        UserNotValidException exception = Assertions.assertThrows(
+                UserNotValidException.class,
+                () -> createEventService.execute(command)
+        );
+        Assertions.assertEquals(ErrorMessages.NOT_AUTHENTICATED.getMessage(), exception.getMessage());
     }
 }

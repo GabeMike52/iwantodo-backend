@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final JwtUtil jwtUtil;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -24,9 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
         }
-        if(token != null && JwtUtil.isTokenValid(token)) {
+        if(token != null && jwtUtil.isTokenValid(token)) {
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    JwtUtil.getClaims(token).getSubject(),
+                    jwtUtil.getClaims(token).getSubject(),
                     null,
                     Collections.emptyList()
             );

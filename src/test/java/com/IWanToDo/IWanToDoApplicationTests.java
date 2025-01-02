@@ -8,6 +8,7 @@ class IWanToDoApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//sanity check
 	}
 
 }

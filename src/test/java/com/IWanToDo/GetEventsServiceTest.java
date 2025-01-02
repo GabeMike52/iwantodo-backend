@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
@@ -24,11 +23,13 @@ public class GetEventsServiceTest {
     @Mock
     private EventRepository eventRepository;
 
+    @Mock JwtUtil jwtUtil;
+
     @InjectMocks
     private GetEventsService getEventsService;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
@@ -45,21 +46,19 @@ public class GetEventsServiceTest {
 
         Claims claims = mock(Claims.class);
         when(claims.getSubject()).thenReturn(user.getUsername());
-        try (MockedStatic<JwtUtil> mockedJwtUtil = mockStatic(JwtUtil.class)) {
-            mockedJwtUtil.when(() -> JwtUtil.extractToken(jwtToken)).thenReturn(token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenReturn(user.getUsername());
-            mockedJwtUtil.when(() -> JwtUtil.getClaims(token)).thenReturn(claims);
-            when(eventRepository.findByOwner(user.getUsername())).thenReturn(events);
+        when(jwtUtil.extractToken(jwtToken)).thenReturn(token);
+        when(jwtUtil.extractUsername(token)).thenReturn(user.getUsername());
+        when(jwtUtil.getClaims(token)).thenReturn(claims);
+        when(eventRepository.findByOwner(user.getUsername())).thenReturn(events);
 
-            List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();
+        List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();
 
-            //When
-            ResponseEntity<List<EventDTO>> response = getEventsService.execute(jwtToken);
+        //When
+        ResponseEntity<List<EventDTO>> response = getEventsService.execute(jwtToken);
 
-            //Then
-            Assertions.assertNotNull(response);
-            Assertions.assertEquals(eventDTOs, response.getBody());
-            verify(eventRepository, times(1)).findByOwner(user.getUsername());
-        }
+        //Then
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(eventDTOs, response.getBody());
+        verify(eventRepository, times(1)).findByOwner(user.getUsername());
     }
 }

@@ -19,11 +19,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateEventService implements Command<CreateEventCommand, EventDTO> {
     private final EventRepository eventRepository;
+    private final JwtUtil jwtUtil;
     private static final Logger logger = LoggerFactory.getLogger(CreateEventService.class);
     private final UserRepository userRepository;
 
-    public CreateEventService(EventRepository eventRepository, UserRepository userRepository) {
+    public CreateEventService(EventRepository eventRepository,
+                              JwtUtil jwtUtil,
+                              UserRepository userRepository) {
         this.eventRepository = eventRepository;
+        this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
     }
 
@@ -31,8 +35,8 @@ public class CreateEventService implements Command<CreateEventCommand, EventDTO>
     public ResponseEntity<EventDTO> execute(CreateEventCommand command) {
         logger.info("Executing " + getClass() + " event: " + command.getEvent());
         EventValidator.execute(command.getEvent());
-        String token = JwtUtil.extractToken(command.getToken());
-        String username = JwtUtil.extractUsername(token);
+        String token = jwtUtil.extractToken(command.getToken());
+        String username = jwtUtil.extractUsername(token);
         if(username == null || username.isEmpty()) {
             throw new UserNotValidException(ErrorMessages.NOT_AUTHENTICATED.getMessage());
         }
