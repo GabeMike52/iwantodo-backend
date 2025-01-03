@@ -37,8 +37,16 @@ public class GetEventsServiceTest {
     public void given_auth_token_when_get_events_service_then_return_list_of_event_dtos() {
         //Given
         User user = new User("john.doe", "john@doe.com", "this-user-password");
-        Event eventOne = new Event("Testing", false, user);
-        Event eventTwo = new Event("Testing 2", true, user);
+        Event eventOne = new Event();
+        eventOne.setEventId(1L);
+        eventOne.setTitle("Testing");
+        eventOne.setDone(false);
+        eventOne.setOwner(user);
+        Event eventTwo = new Event();
+        eventTwo.setEventId(2L);
+        eventTwo.setTitle("Testing two");
+        eventTwo.setDone(true);
+        eventTwo.setOwner(user);
         List<Event> events = List.of(eventOne, eventTwo);
 
         String header = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9.dummy-signature";

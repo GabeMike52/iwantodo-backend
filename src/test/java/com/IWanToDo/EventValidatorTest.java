@@ -13,8 +13,11 @@ public class EventValidatorTest {
     public void given_valid_event_when_execute_then_no_exception() {
         //Given
         User user = new User("john.doe", "john@doe.com", "this-user-password");
-        Event validEvent = new Event("Valid event", true, user);
+        Event validEvent = new Event();
         validEvent.setEventId(1L);
+        validEvent.setTitle("Testing");
+        validEvent.setDone(true);
+        validEvent.setOwner(user);
 
         //When & Then
         Assertions.assertDoesNotThrow(() -> EventValidator.execute(validEvent));
@@ -24,8 +27,11 @@ public class EventValidatorTest {
     public void given_event_with_empty_title_when_execute_throw_event_not_valid_exception() {
         //Given
         User user = new User("john.doe", "john@doe.com", "this-user-password");
-        Event eventWithEmptyTitle = new Event("", true, user);
+        Event eventWithEmptyTitle = new Event();
         eventWithEmptyTitle.setEventId(1L);
+        eventWithEmptyTitle.setTitle("");
+        eventWithEmptyTitle.setDone(true);
+        eventWithEmptyTitle.setOwner(user);
 
         //When & Then
         EventNotValidException exception = Assertions.assertThrows(
@@ -39,8 +45,11 @@ public class EventValidatorTest {
     public void given_event_with_null_done_field_when_execute_throw_event_not_valid_exception() {
         //Given
         User user = new User("john.doe", "john@doe.com", "this-user-password");
-        Event eventWithNullDoneField = new Event("Test Event", null, user);
+        Event eventWithNullDoneField = new Event();
         eventWithNullDoneField.setEventId(1L);
+        eventWithNullDoneField.setTitle("Testing");
+        eventWithNullDoneField.setDone(null);
+        eventWithNullDoneField.setOwner(user);
 
         //When & Then
         EventNotValidException exception = Assertions.assertThrows(

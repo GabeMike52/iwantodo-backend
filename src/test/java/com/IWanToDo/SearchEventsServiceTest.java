@@ -41,10 +41,16 @@ public class SearchEventsServiceTest {
         String title = "Testing";
         String username = "john.doe";
         User user = new User(username, "john@doe.com", "this-user-password");
-        Event eventOne = new Event("Testing", false, user);
+        Event eventOne = new Event();
         eventOne.setEventId(1L);
-        Event eventTwo = new Event("Testing two", true, user);
+        eventOne.setTitle("Testing");
+        eventOne.setDone(false);
+        eventOne.setOwner(user);
+        Event eventTwo = new Event();
         eventTwo.setEventId(2L);
+        eventTwo.setTitle("Testing two");
+        eventTwo.setDone(true);
+        eventTwo.setOwner(user);
         List<Event> events = List.of(eventOne, eventTwo);
         List<EventDTO> eventDTOs = events.stream().map(EventDTO::new).toList();
 
