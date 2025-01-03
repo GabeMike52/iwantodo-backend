@@ -3,7 +3,6 @@ package com.iwantodo.services.event;
 import com.iwantodo.entities.event.Event;
 import com.iwantodo.entities.event.EventDTO;
 import com.iwantodo.infra.exception.EventNotFoundException;
-import com.iwantodo.infra.security.jwt.JwtUtil;
 import com.iwantodo.repositories.EventRepository;
 import com.iwantodo.services.Command;
 import com.iwantodo.validators.EventValidator;
