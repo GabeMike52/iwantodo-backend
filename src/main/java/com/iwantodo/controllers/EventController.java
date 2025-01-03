@@ -14,13 +14,17 @@ public class EventController {
     private final CreateEventService createEventService;
     private final GetEventsService getEventsService;
     private final SearchEventsService searchEventsService;
+    private final UpdateEventService updateEventService;
+    private final DeleteEventService deleteEventService;
 
     public EventController(CreateEventService createEventService,
                            GetEventsService getEventsService,
-                           SearchEventsService searchEventsService) {
+                           SearchEventsService searchEventsService, UpdateEventService updateEventService, DeleteEventService deleteEventService) {
         this.createEventService = createEventService;
         this.getEventsService = getEventsService;
         this.searchEventsService = searchEventsService;
+        this.updateEventService = updateEventService;
+        this.deleteEventService = deleteEventService;
     }
 
     @PostMapping("/create")
@@ -36,5 +40,15 @@ public class EventController {
     @GetMapping("/events/filter")
     public ResponseEntity<List<EventDTO>> searchEvents(@RequestHeader("Authorization") String header, @RequestBody String title) {
         return searchEventsService.execute(new SearchEventsCommand(header, title));
+    }
+
+    @PatchMapping("/event{:eventId}")
+    public ResponseEntity<EventDTO> changeEventStatus(@RequestParam Long eventId, @RequestBody boolean status) {
+        return updateEventService.execute(new UpdateEventCommand(eventId, status));
+    }
+
+    @DeleteMapping("/event{:eventId}")
+    public ResponseEntity<Void> deleteEvent(@RequestParam Long eventId) {
+        return deleteEventService.execute(eventId);
     }
 }
