@@ -44,7 +44,7 @@ public class CreateEventService implements Command<CreateEventCommand, EventDTO>
         User user = userRepository.findUserByUsername(username);
         Event event = command.getEvent();
         event.setOwner(user);
-        Event savedEvent = eventRepository.save(new Event(event.getTitle(), event.getDone(), event.getOwner()));
+        Event savedEvent = eventRepository.save(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(new EventDTO(savedEvent));
     }
 }

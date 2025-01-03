@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
+    @Column(name = "event_id", nullable = false)
     private Long eventId;
     private String title;
     @Column(name = "done")

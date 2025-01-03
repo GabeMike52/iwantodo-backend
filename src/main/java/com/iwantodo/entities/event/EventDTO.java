@@ -11,6 +11,7 @@ public class EventDTO {
     private User owner;
 
     public EventDTO(Event event) {
+        this.eventId = event.getEventId();
         this.title = event.getTitle();
         this.done = event.getDone();
         this.owner = event.getOwner();

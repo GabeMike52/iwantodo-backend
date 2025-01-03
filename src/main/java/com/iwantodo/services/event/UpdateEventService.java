@@ -26,7 +26,11 @@ public class UpdateEventService implements Command<UpdateEventCommand, EventDTO>
         logger.info("Executing " + getClass() + " done: " + command.isStatus());
         Optional<Event> eventOptional = eventRepository.findById(command.getEventId());
         if(eventOptional.isPresent()) {
-            Event event = new Event(eventOptional.get().getTitle(), command.isStatus(), eventOptional.get().getOwner());
+            Event event = new Event();
+            event.setEventId(eventOptional.get().getEventId());
+            event.setTitle(eventOptional.get().getTitle());
+            event.setDone(command.isStatus());
+            event.setOwner(eventOptional.get().getOwner());
             EventValidator.execute(event);
             eventRepository.save(event);
             return ResponseEntity.ok(new EventDTO(event));
